@@ -1,7 +1,6 @@
 [build]
-  base    = "poupaquest"
-  command = "npm run build"
-  publish = "dist"
+  command = "cd poupaquest && npm install && npm run build"
+  publish = "poupaquest/dist"
 
 [[redirects]]
   from = "/*"
