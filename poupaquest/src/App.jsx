@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, redirect } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 
 import Onboarding       from './screens/mobile/Onboarding';
@@ -20,32 +20,32 @@ import WebGoals       from './screens/web/Goals';
 import WebRecurrings  from './screens/web/Recurrings';
 import WebInvestments from './screens/web/Investments';
 
+const router = createBrowserRouter([
+  { path: '/',                      loader: () => redirect('/onboarding') },
+  { path: '/onboarding',            element: <Onboarding /> },
+  { path: '/home',                  element: <Home /> },
+  { path: '/lancar',                element: <QuickAdd /> },
+  { path: '/lancamentos',           element: <Transactions /> },
+  { path: '/lancamentos/editar',    element: <TransactionEdit /> },
+  { path: '/categorias',            element: <Categories /> },
+  { path: '/investimentos',         element: <Investments /> },
+  { path: '/investimentos/detalhe', element: <InvestmentDetail /> },
+  { path: '/jornada',               element: <Journey /> },
+  { path: '/jornada/conquistas',    element: <Achievements /> },
+  { path: '/recorrencias',          element: <Recurrings /> },
+  { path: '/metas',                 element: <Goals /> },
+  { path: '/metas/criar',           element: <GoalCreate /> },
+  { path: '/web',                   element: <Dashboard /> },
+  { path: '/web/metas',             element: <WebGoals /> },
+  { path: '/web/recorrencias',      element: <WebRecurrings /> },
+  { path: '/web/investimentos',     element: <WebInvestments /> },
+  { path: '*',                      loader: () => redirect('/onboarding') },
+]);
+
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/"                      element={<Navigate to="/onboarding" replace />} />
-          <Route path="/onboarding"            element={<Onboarding />} />
-          <Route path="/home"                  element={<Home />} />
-          <Route path="/lancar"                element={<QuickAdd />} />
-          <Route path="/lancamentos"           element={<Transactions />} />
-          <Route path="/lancamentos/editar"    element={<TransactionEdit />} />
-          <Route path="/categorias"            element={<Categories />} />
-          <Route path="/investimentos"         element={<Investments />} />
-          <Route path="/investimentos/detalhe" element={<InvestmentDetail />} />
-          <Route path="/jornada"               element={<Journey />} />
-          <Route path="/jornada/conquistas"    element={<Achievements />} />
-          <Route path="/recorrencias"          element={<Recurrings />} />
-          <Route path="/metas"                 element={<Goals />} />
-          <Route path="/metas/criar"           element={<GoalCreate />} />
-          <Route path="/web"                   element={<Dashboard />} />
-          <Route path="/web/metas"             element={<WebGoals />} />
-          <Route path="/web/recorrencias"      element={<WebRecurrings />} />
-          <Route path="/web/investimentos"     element={<WebInvestments />} />
-          <Route path="*"                      element={<Navigate to="/onboarding" replace />} />
-        </Routes>
-      </BrowserRouter>
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }
