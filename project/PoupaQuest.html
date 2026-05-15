@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>PoupaQuest — Protótipo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; }
+  body { font-family: 'Geist', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="browser-window.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="pq-tokens.jsx"></script>
+<script type="text/babel" src="pq-components.jsx"></script>
+<script type="text/babel" src="pq-mobile-home.jsx"></script>
+<script type="text/babel" src="pq-mobile-quickadd.jsx"></script>
+<script type="text/babel" src="pq-mobile-journey.jsx"></script>
+<script type="text/babel" src="pq-mobile-categories.jsx"></script>
+<script type="text/babel" src="pq-mobile-investments.jsx"></script>
+<script type="text/babel" src="pq-mobile-transactions.jsx"></script>
+<script type="text/babel" src="pq-mobile-onboarding.jsx"></script>
+<script type="text/babel" src="pq-mobile-goals.jsx"></script>
+<script type="text/babel" src="pq-mobile-investment-detail.jsx"></script>
+<script type="text/babel" src="pq-mobile-recurrings.jsx"></script>
+<script type="text/babel" src="pq-mobile-transaction-edit.jsx"></script>
+<script type="text/babel" src="pq-web-dashboard.jsx"></script>
+<script type="text/babel" src="pq-web-screens.jsx"></script>
+<script type="text/babel" data-presets="env,react">
+// PoupaQuest app — inlined to avoid concurrent fetch failures
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "dark": false
+}/*EDITMODE-END*/;
+
+const PH_W = 402, PH_H = 874;
+const WEB_W = 1280, WEB_H = 800;
+
+function Phone({ children, dark }) {
+  return <IOSDevice width={PH_W} height={PH_H} dark={dark}>{children}</IOSDevice>;
+}
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const theme = pqTheme(t.dark);
+  React.useEffect(() => {
+    document.body.style.background = t.dark ? '#1b1714' : '#f0eee9';
+  }, [t.dark]);
+
+  return (
+    <React.Fragment>
+      <DesignCanvas>
+        <DCSection id="onb" title="Onboarding" subtitle="Primeiro acesso · 4 passos">
+          <DCArtboard id="onb-1" label="1 · Boas-vindas" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><OB1Welcome theme={theme} /></Phone>
+          </DCArtboard>
+          <DCArtboard id="onb-2" label="2 · Renda + orçamento" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><OB2Budget theme={theme} /></Phone>
+          </DCArtboard>
+          <DCArtboard id="onb-3" label="3 · Conectar contas" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><OB3Connect theme={theme} /></Phone>
+          </DCArtboard>
+          <DCArtboard id="onb-4" label="4 · Missão zero" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><OB4Quest theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="home" title="Mobile · Home" subtitle="Direção escolhida · gamificado">
+          <DCArtboard id="home-c" label="Home" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><HomeC theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="add" title="Mobile · Lançar gasto" subtitle="Atalhos rápidos + folha de lançamento">
+          <DCArtboard id="add-fab" label="Atalhos no FAB" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><QuickAddIntro theme={theme} /></Phone>
+          </DCArtboard>
+          <DCArtboard id="add-sheet" label="Folha de lançamento" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><QuickAddSheet theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="tx" title="Mobile · Lançamentos" subtitle="Lista, filtros, swipe-to-delete + edição detalhada">
+          <DCArtboard id="tx-list" label="Lista" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><TransactionsList theme={theme} /></Phone>
+          </DCArtboard>
+          <DCArtboard id="tx-edit" label="Editar lançamento" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><TransactionEdit theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="rec" title="Mobile · Recorrências" subtitle="Assinaturas, contas fixas e parcelas — em um só lugar">
+          <DCArtboard id="rec-list" label="Cobranças recorrentes" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><Recurrings theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="goals" title="Mobile · Metas & Cofrinhos" subtitle="Lista de metas em progresso + criar nova">
+          <DCArtboard id="goals-list" label="Cofrinhos" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><GoalsList theme={theme} /></Phone>
+          </DCArtboard>
+          <DCArtboard id="goals-new" label="Criar meta" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><GoalCreate theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="cat" title="Mobile · Gastos por categoria">
+          <DCArtboard id="cat-view" label="Categorias" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><CategoriesView theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="inv" title="Mobile · Investimentos" subtitle="Carteira + detalhe de aplicação">
+          <DCArtboard id="inv-view" label="Carteira" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><InvestmentsView theme={theme} /></Phone>
+          </DCArtboard>
+          <DCArtboard id="inv-detail" label="Detalhe · HGLG11" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><InvestmentDetail theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="quest" title="Mobile · Jornada & Conquistas" subtitle="Gamificação: capítulos, missões, badges">
+          <DCArtboard id="quest-map" label="Mapa de jornada" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><JourneyMap theme={theme} /></Phone>
+          </DCArtboard>
+          <DCArtboard id="quest-ach" label="Conquistas & missões" width={PH_W} height={PH_H}>
+            <Phone dark={t.dark}><MissionsAndAchievements theme={theme} /></Phone>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="web" title="Web · Dashboard" subtitle="1280 × 800 — visão completa para uso diário no desktop">
+          <DCArtboard id="web-dash" label="Dashboard" width={WEB_W} height={WEB_H}>
+            <ChromeWindow width={WEB_W} height={WEB_H}
+              tabs={[{ title: 'PoupaQuest — Início' }, { title: 'Banco Itaú' }]}
+              activeIndex={0} url="poupaquest.app/inicio">
+              <WebDashboard theme={theme} />
+            </ChromeWindow>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="web-goals" title="Web · Metas & Cofrinhos">
+          <DCArtboard id="web-goals" label="Metas" width={WEB_W} height={WEB_H}>
+            <ChromeWindow width={WEB_W} height={WEB_H}
+              tabs={[{ title: 'PoupaQuest — Metas' }]}
+              activeIndex={0} url="poupaquest.app/metas">
+              <WebGoals theme={theme} />
+            </ChromeWindow>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="web-rec" title="Web · Recorrências" subtitle="Calendário mensal + listas por tipo">
+          <DCArtboard id="web-rec" label="Recorrências" width={WEB_W} height={WEB_H}>
+            <ChromeWindow width={WEB_W} height={WEB_H}
+              tabs={[{ title: 'PoupaQuest — Recorrências' }]}
+              activeIndex={0} url="poupaquest.app/recorrencias">
+              <WebRecurrings theme={theme} />
+            </ChromeWindow>
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="web-inv" title="Web · Investimentos" subtitle="Evolução, composição, aplicações e proventos">
+          <DCArtboard id="web-inv" label="Investimentos" width={WEB_W} height={WEB_H}>
+            <ChromeWindow width={WEB_W} height={WEB_H}
+              tabs={[{ title: 'PoupaQuest — Investimentos' }]}
+              activeIndex={0} url="poupaquest.app/investimentos">
+              <WebInvestments theme={theme} />
+            </ChromeWindow>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+
+      <TweaksPanel title="Tweaks · PoupaQuest">
+        <TweakSection label="Aparência" />
+        <TweakToggle label="Tema escuro" value={t.dark}
+          onChange={(v) => setTweak('dark', v)} />
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>
