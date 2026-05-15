@@ -1,8 +1,0 @@
-[build]
-  command = "cd poupaquest && npm install && npm run build"
-  publish = "poupaquest/dist"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
